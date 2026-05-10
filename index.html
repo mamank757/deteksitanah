@@ -207,18 +207,106 @@
         ctx.fillStyle = '#e74c3c'; ctx.fill();
     }
 
-      const kamusTanah = {
-    "Alluvial": { "nama": "Tanah Alluvial", "pH": "6.0 - 7.0", "organik": "Sedang", "npk": "Tinggi", "subur": "Sangat Subur", "tanaman": "Padi, Palawija, Tebu", "saran": "Ideal untuk Padi. Jaga sirkulasi air." },
-    "Black": { "nama": "Tanah Hitam", "pH": "6.5 - 7.5", "organik": "Tinggi", "npk": "Tinggi", "subur": "Subur", "tanaman": "Kapas, Kedelai, Jagung", "saran": "Bagus untuk Kedelai. Olah saat lembap." },
-    "Cinder": { "nama": "Tanah Vulkanik", "pH": "5.0 - 7.0", "organik": "Tinggi", "npk": "Sangat Tinggi", "subur": "Sangat Subur", "tanaman": "Sayuran, Kopi, Buah-buahan", "saran": "Terbaik untuk Sayuran/Horti." },
-    "Clay": { "nama": "Tanah Liat", "pH": "4.5 - 6.0", "organik": "Sedang", "npk": "Sedang", "subur": "Sedang", "tanaman": "Padi, Rumput Gajah", "saran": "Drainase wajib lancar agar tak busuk." },
-    "Laterite": { "nama": "Tanah Laterit", "pH": "4.0 - 5.5", "organik": "Rendah", "npk": "Rendah", "subur": "Kurang", "tanaman": "Kelapa Sawit, Karet", "saran": "Tambah pupuk organik & kapur." },
-    "Loamy": { "nama": "Tanah Lempung", "pH": "6.0 - 7.0", "organik": "Tinggi", "npk": "Tinggi", "subur": "Sangat Subur", "tanaman": "Hampir Semua Jenis Tanaman", "saran": "Tanah prima untuk semua tanaman." },
-    "loam": { "nama": "Tanah Lempung", "pH": "6.0 - 7.0", "organik": "Tinggi", "npk": "Tinggi", "subur": "Sangat Subur", "tanaman": "Hampir Semua Jenis Tanaman", "saran": "Tanah prima untuk semua tanaman." },
-    "Peat": { "nama": "Tanah Gambut", "pH": "3.0 - 5.0", "organik": "Sangat Tinggi", "npk": "Rendah", "subur": "Rendah", "tanaman": "Nanas, Kelapa Sawit", "saran": "Beri Dolomit & parit drainase." },
-    "Red": { "nama": "Tanah Merah", "pH": "4.5 - 5.5", "organik": "Rendah", "npk": "Rendah", "subur": "Kurang", "tanaman": "Ubi Kayu, Karet", "saran": "Beri SP-36 dosis ekstra." },
-    "Sandy": { "nama": "Tanah Berpasir", "pH": "5.5 - 7.0", "organik": "Rendah", "npk": "Rendah", "subur": "Rendah", "tanaman": "Kelapa, Semangka, Kacang Tanah", "saran": "Wajib tambah kompos tiap musim." },
-    "Yellow": { "nama": "Tanah Kuning", "pH": "4.5 - 5.5", "organik": "Rendah", "npk": "Rendah", "subur": "Kurang", "tanaman": "Tanaman Keras/Kehutanan", "saran": "Pakai mulsa agar tak tererosi." }
+     const kamusTanah = {
+    "Alluvial": { 
+        "nama": "Tanah Alluvial", 
+        "pH": "5.5 - 7.5", 
+        "organik": "Sedang - Tinggi", 
+        "npk": "Tinggi", 
+        "subur": "Sangat Subur", 
+        "tanaman": "Padi, Palawija, Tebu, Sayuran", 
+        "saran": "Ideal untuk padi. Jaga sirkulasi air dan hindari genangan lama." 
+    },
+    "Black": { 
+        "nama": "Tanah Hitam (Vertisol)", 
+        "pH": "6.0 - 8.0", 
+        "organik": "Tinggi", 
+        "npk": "Tinggi", 
+        "subur": "Subur", 
+        "tanaman": "Kapas, Kedelai, Jagung, Tembakau", 
+        "saran": "Bagus untuk kedelai. Olah saat tanah lembap, hindari pengolahan saat tanah terlalu basah/lengket." 
+    },
+    "Cinder": { 
+        "nama": "Tanah Vulkanik (Andisol)", 
+        "pH": "5.0 - 7.0", 
+        "organik": "Tinggi", 
+        "npk": "Sangat Tinggi", 
+        "subur": "Sangat Subur", 
+        "tanaman": "Sayuran, Kopi, Teh, Buah, Kentang", 
+        "saran": "Terbaik untuk hortikultura. Perhatikan pemupukan Fosfor (P) karena sering terikat mineral tanah." 
+    },
+    "Clay": { 
+        "nama": "Tanah Liat", 
+        "pH": "4.5 - 6.5", 
+        "organik": "Sedang", 
+        "npk": "Sedang", 
+        "subur": "Sedang", 
+        "tanaman": "Padi, Rumput Gajah, Jagung", 
+        "saran": "Drainase harus lancar agar tidak becek dan busuk akar." 
+    },
+    "Laterite": { 
+        "nama": "Tanah Laterit", 
+        "pH": "4.0 - 5.5", 
+        "organik": "Rendah", 
+        "npk": "Rendah", 
+        "subur": "Kurang Subur", 
+        "tanaman": "Kelapa Sawit, Karet, Ubi Kayu", 
+        "saran": "Tambah pupuk organik dan kapur/dolomit secara rutin untuk menaikkan pH." 
+    },
+    "Loamy": { 
+        "nama": "Tanah Lempung", 
+        "pH": "6.0 - 7.5", 
+        "organik": "Tinggi", 
+        "npk": "Tinggi", 
+        "subur": "Sangat Subur", 
+        "tanaman": "Semua Jenis Tanaman", 
+        "saran": "Tanah paling ideal. Pertahankan kandungan bahan organik dengan pupuk kandang." 
+    },
+    "loam": { 
+        "nama": "Tanah Lempung", 
+        "pH": "6.0 - 7.5", 
+        "organik": "Tinggi", 
+        "npk": "Tinggi", 
+        "subur": "Sangat Subur", 
+        "tanaman": "Semua Jenis Tanaman", 
+        "saran": "Tanah paling ideal. Pertahankan kandungan bahan organik." 
+    },
+    "Peat": { 
+        "nama": "Tanah Gambut", 
+        "pH": "3.0 - 5.0", 
+        "organik": "Sangat Tinggi", 
+        "npk": "Rendah", 
+        "subur": "Rendah (Perlu Ameliorasi)", 
+        "tanaman": "Nanas, Kelapa Sawit, Kopi Liberika", 
+        "saran": "Beri dolomit/kapur dosis tinggi dan atur tata air melalui parit drainase." 
+    },
+    "Red": { 
+        "nama": "Tanah Merah", 
+        "pH": "4.5 - 5.5", 
+        "organik": "Rendah", 
+        "npk": "Rendah - Sedang", 
+        "subur": "Kurang Subur", 
+        "tanaman": "Ubi Kayu, Karet, Pisang", 
+        "saran": "Tambah pupuk P (SP-36) dan bahan organik dalam jumlah banyak." 
+    },
+    "Sandy": { 
+        "nama": "Tanah Berpasir", 
+        "pH": "5.5 - 7.0", 
+        "organik": "Rendah", 
+        "npk": "Rendah", 
+        "subur": "Rendah", 
+        "tanaman": "Kelapa, Semangka, Kacang Tanah, Jagung", 
+        "saran": "Wajib tambah kompos atau pupuk kandang setiap musim tanam untuk mengikat air." 
+    },
+    "Yellow": { 
+        "nama": "Tanah Kuning (Podsolik)", 
+        "pH": "4.5 - 5.5", 
+        "organik": "Rendah", 
+        "npk": "Rendah", 
+        "subur": "Kurang Subur", 
+        "tanaman": "Tanaman Keras, Kehutanan, Karet", 
+        "saran": "Gunakan mulsa dan tanaman penutup tanah (LCC) untuk cegah erosi." 
+    }
 };
 
     // 4. FUNGSI ANALISIS
@@ -251,14 +339,16 @@
 
                 document.getElementById('resLabel').innerText = info.nama;
                 document.getElementById('resConf').innerHTML = `
-                    <div style="color: #2ecc71; margin-bottom: 10px;">Akurasi: ${conf}%</div>
-                    <table>
-                        <tr><td>Kesuburan</td><td align="right">${info.subur}</td></tr>
-                        <tr><td>Estimasi pH</td><td align="right">${info.pH}</td></tr>
-                        <tr><td>Tanaman</td><td align="right">${info.tanaman}</td></tr>
-                    </table>
-                    <p style="font-size: 0.8rem; margin-top:10px;"><b>Saran:</b> ${info.saran}</p>
-                `;
+    <div style="color: #2ecc71; margin-bottom: 10px;">Akurasi: ${conf}%</div>
+    <table>
+        <tr><td>Kesuburan</td><td align="right"><b>${info.subur}</b></td></tr>
+        <tr><td>Estimasi pH</td><td align="right">${info.pH}</td></tr>
+        <tr><td>Bahan Organik</td><td align="right">${info.organik || '-'}</td></tr>
+        <tr><td>Kandungan NPK</td><td align="right">${info.npk || '-'}</td></tr>
+        <tr><td>Tanaman Cocok</td><td align="right" style="color: #ffd700;">${info.tanaman}</td></tr>
+    </table>
+    <p style="font-size: 0.8rem; margin-top:10px;"><b>Saran PPL:</b> ${info.saran}</p>
+`;
                 
                 document.getElementById('result').style.display = 'block';
                 drawTriangle(labelRaw);
