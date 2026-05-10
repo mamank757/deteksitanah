@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Soil AI - Penyuluh Milenial</title>
+    <style>
+        :root {
+            --bg-color: #0b0e14;
+            --card-bg: rgba(255, 255, 255, 0.05);
+            --accent-color: #00f2ff;
+            --text-color: #e0e0e0;
+            --border-color: rgba(0, 242, 255, 0.3);
+        }
+
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 450px;
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            padding: 2rem;
+            border-radius: 20px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 0 20px rgba(0, 242, 255, 0.1);
+            text-align: center;
+        }
+
+        h1 { color: var(--accent-color); font-size: 1.4rem; letter-spacing: 1px; margin-bottom: 5px;}
+
+        .upload-area {
+            border: 2px dashed var(--border-color);
+            padding: 2rem;
+            border-radius: 15px;
+            cursor: pointer;
+            margin-bottom: 1.5rem;
+            transition: 0.3s;
+        }
+
+        .upload-area:hover { border-color: var(--accent-color); background: rgba(0, 242, 255, 0.05); }
+
+        #preview { max-width: 100%; border-radius: 10px; display: none; margin: 10px auto; }
+
+        button {
+            background: transparent;
+            border: 1px solid var(--accent-color);
+            color: var(--accent-color);
+            padding: 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            width: 100%;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        button:hover { background: var(--accent-color); color: #000; box-shadow: 0 0 15px var(--accent-color); }
+
+        #result {
+            margin-top: 1.5rem;
+            padding: 1rem;
+            border-radius: 10px;
+            background: rgba(0, 0, 0, 0.4);
+            display: none;
+            border-left: 4px solid var(--accent-color);
+        }
+
+        .label { font-size: 1.2rem; font-weight: bold; color: var(--accent-color); }
+        .loading { display: none; color: var(--accent-color); margin: 10px 0; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>SOIL DETECTOR AI</h1>
+    <p style="font-size: 0.8rem; opacity: 0.7; margin-bottom: 20px;">Penyuluh Milenial - BPP Bola</p>
+    
+    <div class="upload-area" onclick="document.getElementById('fileInput').click()">
+        <p id="msg">Klik untuk Upload Foto Tanah</p>
+        <input type="file" id="fileInput" accept="image/*" hidden onchange="previewImage(event)">
+        <img id="preview">
+    </div>
+
+    <button id="btnDetect" onclick="detectSoil()">Analisis Jenis Tanah</button>
+    <div id="loading" class="loading">Memproses AI via Cloud...</div>
+
+    <div id="result">
+        <div id="resLabel" class="label">---</div>
+        <div id="resConf" style="font-size: 0.9rem;">Akurasi: 0%</div>
+    </div>
+</div>
+
+<script>
+    function previewImage(event) {
+        const reader = new FileReader();
+        reader.onload = function() {
+            const output = document.getElementById('preview');
+            output.src = reader.result;
+            output.style.display = 'block';
+            document.getElementById('msg').style.display = 'none';
+        };
+        reader.readAsDataURL(event.target.files[0]);
+    }
+
+    async function detectSoil() {
+        const fileInput = document.getElementById('fileInput');
+        if (!fileInput.files[0]) return alert('Pilih foto dulu, Raja!');
+
+        // GANTI INI DENGAN URL EXEC ANDA
+        const urlAppScript = "https://script.google.com/macros/s/AKfycbwe27jOBXR9DnTi9hIWLAwT1kMGf3rRSEFeM1xMCVOiWOhYyOkXol1kmpKGSPqAwkNgDw/exec";
+
+        document.getElementById('loading').style.display = 'block';
+        document.getElementById('btnDetect').disabled = true;
+        document.getElementById('result').style.display = 'none';
+
+        const reader = new FileReader();
+        reader.onload = async function() {
+            const base64Data = reader.result.split(',')[1];
+            
+            try {
+                const response = await fetch(urlAppScript, {
+                    method: "POST",
+                    body: JSON.stringify({ image: base64Data })
+                });
+
+                const result = await response.json();
+                
+                // Mengambil data dari struktur Roboflow Workflow
+                const soilData = result.outputs[0].soil_type;
+                const label = soilData.predicted_classes[0];
+                const conf = (soilData.predictions[label].confidence * 100).toFixed(2);
+
+                document.getElementById('resLabel').innerText = "Hasil: " + label;
+                document.getElementById('resConf').innerText = "Akurasi: " + conf + "%";
+                document.getElementById('result').style.display = 'block';
+            } catch (err) {
+                alert("Error: Gagal terhubung ke AppScript. Pastikan URL benar dan sudah di-Deploy sebagai 'Anyone'.");
+                console.error(err);
+            } finally {
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('btnDetect').disabled = false;
+            }
+        };
+        reader.readAsDataURL(fileInput.files[0]);
+    }
+</script>
+</body>
+</html>
