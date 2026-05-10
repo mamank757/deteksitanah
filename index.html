@@ -7,25 +7,22 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-color: #1a1412; /* Coklat Tanah Gelap */
-            --card-bg: rgba(45, 38, 34, 0.6); /* Coklat Muda Transparan */
-            --accent-color: #2ecc71; /* Hijau Daun Segar */
+            --bg-color: #1a1412; 
+            --card-bg: rgba(45, 38, 34, 0.8);
+            --accent-color: #2ecc71; 
             --text-color: #f5f5f5;
             --border-color: rgba(46, 204, 113, 0.3);
         }
 
         body {
             font-family: 'Poppins', sans-serif;
-            background-color: var(--bg-color);
+            background: radial-gradient(circle at center, #2d2622 0%, #1a1412 100%);
             color: var(--text-color);
             margin: 0;
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            overflow-x: hidden;
-            /* Tambahan gradient halus di background */
-            background: radial-gradient(circle at center, #2d2622 0%, #1a1412 100%);
         }
 
         .container {
@@ -45,7 +42,6 @@
             color: var(--accent-color); 
             font-size: 1.6rem; 
             font-weight: 800;
-            letter-spacing: 1px; 
             margin-bottom: 5px; 
             text-shadow: 0 0 15px rgba(46, 204, 113, 0.4);
         }
@@ -56,13 +52,24 @@
             border-radius: 20px;
             cursor: pointer;
             margin-bottom: 1.5rem;
-            transition: 0.3s;
+            position: relative;
+            overflow: hidden;
             background: rgba(0, 0, 0, 0.2);
+            min-height: 150px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
         }
 
-        .upload-area:hover { border-color: var(--accent-color); background: rgba(46, 204, 113, 0.05); }
-
-        #preview { max-width: 100%; border-radius: 15px; display: none; margin: 0 auto; box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
+        #preview {
+    max-width: 100%;
+    max-height: 250px;
+    object-fit: contain; 
+    border-radius: 15px;
+    display: none;
+    margin-top: 10px;
+}
 
         .scanner-line {
             display: none;
@@ -70,14 +77,14 @@
             top: 0; left: 0; width: 100%; height: 4px;
             background: var(--accent-color);
             box-shadow: 0 0 20px var(--accent-color);
-            z-index: 2;
+            z-index: 10;
             animation: scan 2.5s linear infinite;
         }
 
         @keyframes scan { 0% { top: 0; } 100% { top: 100%; } }
 
         .spinner {
-            display: none; width: 45px; height: 45px; margin: 20px auto;
+            display: none; width: 40px; height: 40px; margin: 20px auto;
             border: 4px solid rgba(46, 204, 113, 0.1);
             border-left-color: var(--accent-color);
             border-radius: 50%;
@@ -88,71 +95,71 @@
 
         button {
             background: linear-gradient(135deg, #27ae60, #2ecc71);
-            border: none;
-            color: #fff;
-            padding: 16px;
-            border-radius: 15px;
-            cursor: pointer;
-            width: 100%;
-            font-weight: 600;
-            text-transform: uppercase;
-            font-size: 0.9rem;
+            border: none; color: #fff; padding: 16px;
+            border-radius: 15px; cursor: pointer; width: 100%;
+            font-weight: 600; text-transform: uppercase;
             transition: 0.4s;
-            box-shadow: 0 4px 15px rgba(39, 174, 96, 0.3);
         }
 
-        button:hover:not(:disabled) { 
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(46, 204, 113, 0.5);
-        }
+        button:disabled { opacity: 0.5; cursor: not-allowed; }
 
         #result {
-            margin-top: 1.5rem;
-            padding: 1.2rem;
-            border-radius: 20px;
-            background: rgba(0, 0, 0, 0.3);
-            display: none;
-            border: 1px solid var(--border-color);
+            margin-top: 1.5rem; padding: 1.2rem;
+            border-radius: 20px; background: rgba(0, 0, 0, 0.4);
+            display: none; border: 1px solid var(--border-color);
             animation: fadeIn 0.6s ease-out;
         }
 
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; } }
 
-        .label { font-size: 1.4rem; font-weight: 800; color: var(--accent-color); margin-bottom: 10px; }
+        .label { font-size: 1.4rem; font-weight: 800; color: var(--accent-color); }
+        table { width: 100%; color: #fff; font-size: 0.85rem; margin-top: 10px; }
+        td { padding: 5px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h1>DETEKTOR TEKSTUR TANAH</h1>
-    <p style="font-size: 0.75rem; opacity: 0.7; margin-bottom: 25px; line-height: 1.4;">
-        Analisis Tekstur, pH, Hara, dan Rekomendasi Tanaman <br><b>PPL Milenial Wajo</b>
-    </p>
+    <h1>DETEKTOR TANAH</h1>
+    <p style="font-size: 0.75rem; opacity: 0.7; margin-bottom: 20px;">PPL Milenial Wajo</p>
     
     <div class="upload-area" onclick="document.getElementById('fileInput').click()">
         <div class="scanner-line" id="scanner"></div>
-        <p id="msg" style="font-size: 0.9rem;">Foto Sampel Tanah</p>
-        <input type="file" id="fileInput" accept="image/*" hidden onchange="previewImage(event)">
+        <p id="msg">Klik untuk Upload Foto Sampel</p>
         <img id="preview">
+        <input type="file" id="fileInput" accept="image/*" hidden onchange="previewImage(event)">
     </div>
 
-    <button id="btnDetect" onclick="detectSoil()">Analisis Tanah</button>
+    <button id="btnDetect" onclick="detectSoil()">Mulai Analisis</button>
     <div class="spinner" id="loader"></div>
 
     <div id="result">
-        <span class="label" id="resLabel">---</span>
+        <div class="label" id="resLabel">---</div>
         <div id="resConf"></div>
-        <div style="margin-top: 20px; background: rgba(0,0,0,0.2); padding: 15px; border-radius: 15px;">
+        <div style="margin-top: 15px; background: rgba(0,0,0,0.3); padding: 10px; border-radius: 15px;">
             <canvas id="textureTriangle" width="300" height="260" style="max-width: 100%;"></canvas>
-            <p style="font-size: 0.65rem; opacity: 0.5; margin-top: 8px;">Diagram Tekstur Tanah USDA</p>
         </div>
     </div>
 </div>
 
 <script>
-    // Fungsi preview, drawTriangle, kamusTanah, dan detectSoil tetap sama 
-    // namun pastikan warna di drawTriangle juga disesuaikan ke HIJAU:
-    
+    // 1. FUNGSI PREVIEW (Agar foto galeri muncul)
+    function previewImage(event) {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            const preview = document.getElementById('preview');
+            const msg = document.getElementById('msg');
+            
+            reader.onload = function(e) {
+                preview.src = e.target.result;
+                preview.style.display = 'block';
+                msg.style.display = 'none';
+            }
+            reader.readAsDataURL(file);
+        }
+    }
+
     function drawTriangle(label) {
         const canvas = document.getElementById('textureTriangle');
         const ctx = canvas.getContext('2d');
@@ -203,7 +210,7 @@
       const kamusTanah = {
     "Alluvial": { "nama": "Tanah Alluvial", "pH": "6.0 - 7.0", "organik": "Sedang", "npk": "Tinggi", "subur": "Sangat Subur", "tanaman": "Padi, Palawija, Tebu", "saran": "Ideal untuk Padi. Jaga sirkulasi air." },
     "Black": { "nama": "Tanah Hitam", "pH": "6.5 - 7.5", "organik": "Tinggi", "npk": "Tinggi", "subur": "Subur", "tanaman": "Kapas, Kedelai, Jagung", "saran": "Bagus untuk Kedelai. Olah saat lembap." },
-    "Cinder": { "nama": "Tanah Vulkanik", "pH": "5.0 - 7.0", "organik": "Tinggi", "npk": "Sangat Tinggi", "subit": "Sangat Subur", "tanaman": "Sayuran, Kopi, Buah-buahan", "saran": "Terbaik untuk Sayuran/Horti." },
+    "Cinder": { "nama": "Tanah Vulkanik", "pH": "5.0 - 7.0", "organik": "Tinggi", "npk": "Sangat Tinggi", "subur": "Sangat Subur", "tanaman": "Sayuran, Kopi, Buah-buahan", "saran": "Terbaik untuk Sayuran/Horti." },
     "Clay": { "nama": "Tanah Liat", "pH": "4.5 - 6.0", "organik": "Sedang", "npk": "Sedang", "subur": "Sedang", "tanaman": "Padi, Rumput Gajah", "saran": "Drainase wajib lancar agar tak busuk." },
     "Laterite": { "nama": "Tanah Laterit", "pH": "4.0 - 5.5", "organik": "Rendah", "npk": "Rendah", "subur": "Kurang", "tanaman": "Kelapa Sawit, Karet", "saran": "Tambah pupuk organik & kapur." },
     "Loamy": { "nama": "Tanah Lempung", "pH": "6.0 - 7.0", "organik": "Tinggi", "npk": "Tinggi", "subur": "Sangat Subur", "tanaman": "Hampir Semua Jenis Tanaman", "saran": "Tanah prima untuk semua tanaman." },
@@ -214,14 +221,15 @@
     "Yellow": { "nama": "Tanah Kuning", "pH": "4.5 - 5.5", "organik": "Rendah", "npk": "Rendah", "subur": "Kurang", "tanaman": "Tanaman Keras/Kehutanan", "saran": "Pakai mulsa agar tak tererosi." }
 };
 
+    // 4. FUNGSI ANALISIS
     async function detectSoil() {
         const fileInput = document.getElementById('fileInput');
-        if (!fileInput.files[0]) return alert('Pilih foto dulu, Raja!');
+        if (!fileInput.files[0]) return alert('Pilih foto terlebih dahulu!');
 
+        // Ganti dengan URL web app Apps Script Anda
         const urlAppScript = "https://script.google.com/macros/s/AKfycbwe27jOBXR9DnTi9hIWLAwT1kMGf3rRSEFeM1xMCVOiWOhYyOkXol1kmpKGSPqAwkNgDw/exec";
 
         document.getElementById('loader').style.display = 'block';
-        document.getElementById('loadText').style.display = 'block';
         document.getElementById('scanner').style.display = 'block';
         document.getElementById('btnDetect').disabled = true;
         document.getElementById('result').style.display = 'none';
@@ -234,35 +242,32 @@
                     method: "POST",
                     body: JSON.stringify({ image: base64Data })
                 });
-                const result = await response.json();
-                const soilData = result.outputs[0].soil_type;
-                const labelRaw = soilData.predicted_classes[0];
-                const conf = (soilData.predictions[labelRaw].confidence * 100).toFixed(2);
+                const data = await response.json();
+                
+                // Asumsi struktur response: data.outputs[0].soil_type.predicted_classes[0]
+                const labelRaw = data.outputs[0].soil_type.predicted_classes[0];
+                const conf = (data.outputs[0].soil_type.predictions[labelRaw].confidence * 100).toFixed(1);
+                const info = kamusTanah[labelRaw] || { "nama": labelRaw, "subur": "-", "pH": "-", "tanaman": "-", "saran": "Cek pH manual." };
 
-                const infoTanah = kamusTanah[labelRaw] || { "nama": labelRaw, "subur": "-", "pH": "-", "organik": "-", "npk": "-", "saran": "Cek pH manual." };
-
-                document.getElementById('resLabel').innerText = infoTanah.nama;
+                document.getElementById('resLabel').innerText = info.nama;
                 document.getElementById('resConf').innerHTML = `
-                    <div style="color: #00f2ff; margin-bottom: 12px; font-weight: bold;">Akurasi: ${conf}%</div>
-                    <div style="text-align: left; background: rgba(255,255,255,0.05); padding: 12px; border-radius: 12px; font-size: 0.85rem;">
-                        <table style="width: 100%; border-collapse: collapse; margin-bottom: 10px; color: #fff;">
-                            <tr><td style="padding: 4px 0; opacity: 0.8;">Kesuburan</td><td style="text-align: right; color: var(--accent-color);"><b>${infoTanah.subur}</b></td></tr>
-                            <tr><td style="padding: 4px 0; opacity: 0.8;">Estimasi pH</td><td style="text-align: right;">${infoTanah.pH}</td></tr>
-                            <tr><td style="padding: 4px 0; opacity: 0.8;">Bahan Organik</td><td style="text-align: right;">${infoTanah.organik}</td></tr>
-                            <tr><td style="padding: 4px 0; opacity: 0.8;">Kandungan NPK</td><td style="text-align: right;">${infoTanah.npk}</td></tr>
-                            <tr><td style="padding: 8px 0 4px 0; opacity: 0.8; vertical-align: top;">Tanaman Cocok</td><td style="text-align: right; color: #ffd700;"><i>${infoTanah.tanaman}</i></td></tr>
-                        </table>
-                        <div style="border-top: 1px solid rgba(0,242,255,0.2); margin-top: 10px; padding-top: 10px;">
-                            <p style="color: #fff; margin: 0;"><b>Saran PPL:</b><br>${infoTanah.saran}</p>
-                        </div>
-                    </div>`;
+                    <div style="color: #2ecc71; margin-bottom: 10px;">Akurasi: ${conf}%</div>
+                    <table>
+                        <tr><td>Kesuburan</td><td align="right">${info.subur}</td></tr>
+                        <tr><td>Estimasi pH</td><td align="right">${info.pH}</td></tr>
+                        <tr><td>Tanaman</td><td align="right">${info.tanaman}</td></tr>
+                    </table>
+                    <p style="font-size: 0.8rem; margin-top:10px;"><b>Saran:</b> ${info.saran}</p>
+                `;
+                
                 document.getElementById('result').style.display = 'block';
                 drawTriangle(labelRaw);
+
             } catch (err) {
-                alert("Gagal terhubung!");
+                alert("Koneksi gagal atau Server sibuk.");
+                console.error(err);
             } finally {
                 document.getElementById('loader').style.display = 'none';
-                document.getElementById('loadText').style.display = 'none';
                 document.getElementById('scanner').style.display = 'none';
                 document.getElementById('btnDetect').disabled = false;
             }
@@ -270,5 +275,6 @@
         reader.readAsDataURL(fileInput.files[0]);
     }
 </script>
+
 </body>
 </html>
