@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Soil AI - Penyuluh Milenial</title>
+    <title>DETEKSI TEKSTUR TANAH - PPL Milenial Wajo</title>
     <style>
         :root {
             --bg-color: #0b0e14;
@@ -22,131 +22,244 @@
             justify-content: center;
             align-items: center;
             min-height: 100vh;
+            overflow-x: hidden;
         }
 
         .container {
             width: 90%;
             max-width: 450px;
             background: var(--card-bg);
-            backdrop-filter: blur(10px);
+            backdrop-filter: blur(15px);
             padding: 2rem;
-            border-radius: 20px;
+            border-radius: 25px;
             border: 1px solid var(--border-color);
-            box-shadow: 0 0 20px rgba(0, 242, 255, 0.1);
+            box-shadow: 0 0 30px rgba(0, 242, 255, 0.1);
             text-align: center;
+            position: relative;
         }
 
-        h1 { color: var(--accent-color); font-size: 1.4rem; letter-spacing: 1px; margin-bottom: 5px;}
+        h1 { color: var(--accent-color); font-size: 1.5rem; letter-spacing: 2px; margin-bottom: 5px; text-shadow: 0 0 10px rgba(0, 242, 255, 0.5); }
 
         .upload-area {
             border: 2px dashed var(--border-color);
             padding: 2rem;
-            border-radius: 15px;
+            border-radius: 20px;
             cursor: pointer;
             margin-bottom: 1.5rem;
             transition: 0.3s;
+            position: relative;
+            overflow: hidden;
+            background: rgba(0, 0, 0, 0.2);
         }
 
         .upload-area:hover { border-color: var(--accent-color); background: rgba(0, 242, 255, 0.05); }
 
-        #preview { max-width: 100%; border-radius: 10px; display: none; margin: 10px auto; }
+        #preview { max-width: 100%; border-radius: 12px; display: none; margin: 0 auto; position: relative; z-index: 1; }
+
+        .scanner-line {
+            display: none;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: var(--accent-color);
+            box-shadow: 0 0 15px var(--accent-color);
+            z-index: 2;
+            animation: scan 2s linear infinite;
+        }
+
+        @keyframes scan { 0% { top: 0; } 100% { top: 100%; } }
+
+        .spinner {
+            display: none;
+            width: 40px;
+            height: 40px;
+            margin: 15px auto;
+            border: 4px solid rgba(0, 242, 255, 0.1);
+            border-left-color: var(--accent-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin { 100% { transform: rotate(360deg); } }
 
         button {
             background: transparent;
-            border: 1px solid var(--accent-color);
+            border: 2px solid var(--accent-color);
             color: var(--accent-color);
-            padding: 12px;
-            border-radius: 8px;
+            padding: 14px;
+            border-radius: 12px;
             cursor: pointer;
             width: 100%;
             font-weight: bold;
             text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: 0.3s;
         }
 
-        button:hover { background: var(--accent-color); color: #000; box-shadow: 0 0 15px var(--accent-color); }
+        button:hover:not(:disabled) { background: var(--accent-color); color: #000; box-shadow: 0 0 20px var(--accent-color); }
+        button:disabled { border-color: #444; color: #444; cursor: not-allowed; }
 
         #result {
             margin-top: 1.5rem;
-            padding: 1rem;
-            border-radius: 10px;
-            background: rgba(0, 0, 0, 0.4);
+            padding: 1.2rem;
+            border-radius: 15px;
+            background: rgba(0, 242, 255, 0.1);
             display: none;
-            border-left: 4px solid var(--accent-color);
+            border: 1px solid var(--accent-color);
+            animation: fadeIn 0.5s ease;
         }
 
-        .label { font-size: 1.2rem; font-weight: bold; color: var(--accent-color); }
-        .loading { display: none; color: var(--accent-color); margin: 10px 0; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .label { font-size: 1.3rem; font-weight: bold; color: var(--accent-color); display: block; margin-bottom: 5px; }
+        .loading-text { display: none; color: var(--accent-color); font-size: 0.9rem; margin-top: 10px; font-style: italic; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h1>SOIL DETECTOR AI</h1>
-    <p style="font-size: 0.8rem; opacity: 0.7; margin-bottom: 20px;">Penyuluh Milenial - BPP Bola</p>
+    <h1>MENDETEKSI TEKSTUR TANAH</h1>
+    <p style="font-size: 0.8rem; opacity: 0.7; margin-bottom: 20px; letter-spacing: 1px;">Mengetahui Jenis, tingkat kesuburan, perkiraan pH, kesesuaian tanaman, dan pengelolaan</p>
     
-    <div class="upload-area" onclick="document.getElementById('fileInput').click()">
-        <p id="msg">Klik untuk Upload Foto Tanah</p>
+    <div class="upload-area" id="dropZone" onclick="document.getElementById('fileInput').click()">
+        <div class="scanner-line" id="scanner"></div>
+        <p id="msg" style="margin:0;">Foto Sampel Tanah</p>
         <input type="file" id="fileInput" accept="image/*" hidden onchange="previewImage(event)">
         <img id="preview">
     </div>
 
-    <button id="btnDetect" onclick="detectSoil()">Analisis Jenis Tanah</button>
-    <div id="loading" class="loading">Memproses AI via Cloud...</div>
+    <button id="btnDetect" onclick="detectSoil()">Analisis Tekstur Tanah</button>
+    
+    <div class="spinner" id="loader"></div>
+    <div class="loading-text" id="loadText">Menghubungkan ke Neural Network...</div>
 
     <div id="result">
-        <div id="resLabel" class="label">---</div>
-        <div id="resConf" style="font-size: 0.9rem;">Akurasi: 0%</div>
+        <span class="label" id="resLabel">---</span>
+        <div id="resConf"></div>
+        
+        <div style="margin-top: 15px; background: rgba(255,255,255,0.03); padding: 10px; border-radius: 12px;">
+            <canvas id="textureTriangle" width="300" height="260" style="max-width: 100%;"></canvas>
+            <p style="font-size: 0.7rem; opacity: 0.6; margin-top: 5px;">Visualisasi Segitiga Tekstur USDA</p>
+        </div>
     </div>
 </div>
 
 <script>
     function previewImage(event) {
         const reader = new FileReader();
+        const output = document.getElementById('preview');
+        const msg = document.getElementById('msg');
         reader.onload = function() {
-            const output = document.getElementById('preview');
             output.src = reader.result;
             output.style.display = 'block';
-            document.getElementById('msg').style.display = 'none';
+            msg.style.display = 'none';
         };
-        reader.readAsDataURL(event.target.files[0]);
+        if(event.target.files[0]) reader.readAsDataURL(event.target.files[0]);
     }
+
+    function drawTriangle(label) {
+        const canvas = document.getElementById('textureTriangle');
+        const ctx = canvas.getContext('2d');
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        const top = { x: 150, y: 30 };
+        const left = { x: 30, y: 230 };
+        const right = { x: 270, y: 230 };
+
+        ctx.beginPath();
+        ctx.moveTo(top.x, top.y);
+        ctx.lineTo(left.x, left.y);
+        ctx.lineTo(right.x, right.y);
+        ctx.closePath();
+        ctx.strokeStyle = '#00f2ff';
+        ctx.lineWidth = 2;
+        ctx.stroke();
+
+        ctx.fillStyle = '#00f2ff';
+        ctx.font = 'bold 10px Arial';
+        ctx.fillText("LIAT", top.x - 12, top.y - 10);
+        ctx.fillText("PASIR", left.x - 25, left.y + 15);
+        ctx.fillText("DEBU", right.x - 5, right.y + 15);
+
+        let dot = { x: 150, y: 130 }; 
+        if (label.toLowerCase().includes("clay")) dot = { x: 150, y: 70 };
+        else if (label.toLowerCase().includes("sandy")) dot = { x: 80, y: 190 };
+        else if (label.toLowerCase().includes("loam")) dot = { x: 150, y: 170 };
+        else if (label.toLowerCase().includes("alluvial")) dot = { x: 190, y: 180 };
+
+        ctx.beginPath();
+        ctx.arc(dot.x, dot.y, 6, 0, Math.PI * 2);
+        ctx.fillStyle = '#ff0055';
+        ctx.shadowBlur = 10;
+        ctx.shadowColor = "#ff0055";
+        ctx.fill();
+    }
+
+    const kamusTanah = {
+        "Alluvial": { "nama": "Tanah Alluvial", "pH": "6.0 - 7.0", "organik": "Sedang", "npk": "Tinggi", "subur": "Sangat Subur", "saran": "Ideal untuk Padi. Jaga sirkulasi air." },
+        "Black": { "nama": "Tanah Hitam", "pH": "6.5 - 7.5", "organik": "Tinggi", "npk": "Tinggi", "subur": "Subur", "saran": "Bagus untuk Kedelai. Olah saat lembap." },
+        "Cinder": { "nama": "Tanah Vulkanik", "pH": "5.0 - 7.0", "organik": "Tinggi", "npk": "Sangat Tinggi", "subur": "Sangat Subur", "saran": "Terbaik untuk Sayuran/Horti." },
+        "Clay": { "nama": "Tanah Liat", "pH": "4.5 - 6.0", "organik": "Sedang", "npk": "Sedang", "subur": "Sedang", "saran": "Drainase wajib lancar agar tak busuk." },
+        "Laterite": { "nama": "Tanah Laterit", "pH": "4.0 - 5.5", "organik": "Rendah", "npk": "Rendah", "subur": "Kurang", "saran": "Tambah pupuk organik & kapur." },
+        "Loamy": { "nama": "Tanah Lempung", "pH": "6.0 - 7.0", "organik": "Tinggi", "npk": "Tinggi", "subur": "Sangat Subur", "saran": "Tanah prima untuk semua tanaman." },
+        "loam": { "nama": "Tanah Lempung", "pH": "6.0 - 7.0", "organik": "Tinggi", "npk": "Tinggi", "subur": "Sangat Subur", "saran": "Tanah prima untuk semua tanaman." },
+        "Peat": { "nama": "Tanah Gambut", "pH": "3.0 - 5.0", "organik": "Sangat Tinggi", "npk": "Rendah", "subur": "Rendah", "saran": "Beri Dolomit & parit drainase." },
+        "Red": { "nama": "Tanah Merah", "pH": "4.5 - 5.5", "organik": "Rendah", "npk": "Rendah", "subur": "Kurang", "saran": "Beri SP-36 dosis ekstra." },
+        "Sandy": { "nama": "Tanah Berpasir", "pH": "5.5 - 7.0", "organik": "Rendah", "npk": "Rendah", "subur": "Rendah", "saran": "Wajib tambah kompos tiap musim." },
+        "Yellow": { "nama": "Tanah Kuning", "pH": "4.5 - 5.5", "organik": "Rendah", "npk": "Rendah", "subur": "Kurang", "saran": "Pakai mulsa agar tak tererosi." }
+    };
 
     async function detectSoil() {
         const fileInput = document.getElementById('fileInput');
         if (!fileInput.files[0]) return alert('Pilih foto dulu, Raja!');
 
-        // GANTI INI DENGAN URL EXEC ANDA
         const urlAppScript = "https://script.google.com/macros/s/AKfycbwe27jOBXR9DnTi9hIWLAwT1kMGf3rRSEFeM1xMCVOiWOhYyOkXol1kmpKGSPqAwkNgDw/exec";
 
-        document.getElementById('loading').style.display = 'block';
+        document.getElementById('loader').style.display = 'block';
+        document.getElementById('loadText').style.display = 'block';
+        document.getElementById('scanner').style.display = 'block';
         document.getElementById('btnDetect').disabled = true;
         document.getElementById('result').style.display = 'none';
 
         const reader = new FileReader();
         reader.onload = async function() {
             const base64Data = reader.result.split(',')[1];
-            
             try {
                 const response = await fetch(urlAppScript, {
                     method: "POST",
                     body: JSON.stringify({ image: base64Data })
                 });
-
                 const result = await response.json();
-                
-                // Mengambil data dari struktur Roboflow Workflow
                 const soilData = result.outputs[0].soil_type;
-                const label = soilData.predicted_classes[0];
-                const conf = (soilData.predictions[label].confidence * 100).toFixed(2);
+                const labelRaw = soilData.predicted_classes[0];
+                const conf = (soilData.predictions[labelRaw].confidence * 100).toFixed(2);
 
-                document.getElementById('resLabel').innerText = "Hasil: " + label;
-                document.getElementById('resConf').innerText = "Akurasi: " + conf + "%";
+                const infoTanah = kamusTanah[labelRaw] || { "nama": labelRaw, "subur": "-", "pH": "-", "organik": "-", "npk": "-", "saran": "Cek pH manual." };
+
+                document.getElementById('resLabel').innerText = infoTanah.nama;
+                document.getElementById('resConf').innerHTML = `
+                    <div style="color: #00f2ff; margin-bottom: 12px; font-weight: bold;">Akurasi: ${conf}%</div>
+                    <div style="text-align: left; background: rgba(255,255,255,0.05); padding: 12px; border-radius: 12px; font-size: 0.85rem;">
+                        <table style="width: 100%; border-collapse: collapse; margin-bottom: 10px; color: #fff;">
+                            <tr><td style="padding: 4px 0; opacity: 0.8;">Kesuburan</td><td style="text-align: right; color: var(--accent-color);"><b>${infoTanah.subur}</b></td></tr>
+                            <tr><td style="padding: 4px 0; opacity: 0.8;">Estimasi pH</td><td style="text-align: right;">${infoTanah.pH}</td></tr>
+                            <tr><td style="padding: 4px 0; opacity: 0.8;">Bahan Organik</td><td style="text-align: right;">${infoTanah.organik}</td></tr>
+                            <tr><td style="padding: 4px 0; opacity: 0.8;">Kandungan NPK</td><td style="text-align: right;">${infoTanah.npk}</td></tr>
+                        </table>
+                        <div style="border-top: 1px solid rgba(0,242,255,0.2); margin-top: 10px; padding-top: 10px;">
+                            <p style="color: #fff; margin: 0;"><b>Saran PPL:</b><br>${infoTanah.saran}</p>
+                        </div>
+                    </div>`;
                 document.getElementById('result').style.display = 'block';
+                drawTriangle(labelRaw);
             } catch (err) {
-                alert("Error: Gagal terhubung ke AppScript. Pastikan URL benar dan sudah di-Deploy sebagai 'Anyone'.");
-                console.error(err);
+                alert("Gagal terhubung!");
             } finally {
-                document.getElementById('loading').style.display = 'none';
+                document.getElementById('loader').style.display = 'none';
+                document.getElementById('loadText').style.display = 'none';
+                document.getElementById('scanner').style.display = 'none';
                 document.getElementById('btnDetect').disabled = false;
             }
         };
