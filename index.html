@@ -4,17 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DETEKSI TEKSTUR TANAH - PPL Milenial Wajo</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-color: #0b0e14;
-            --card-bg: rgba(255, 255, 255, 0.05);
-            --accent-color: #00f2ff;
-            --text-color: #e0e0e0;
-            --border-color: rgba(0, 242, 255, 0.3);
+            --bg-color: #1a1412; /* Coklat Tanah Gelap */
+            --card-bg: rgba(45, 38, 34, 0.6); /* Coklat Muda Transparan */
+            --accent-color: #2ecc71; /* Hijau Daun Segar */
+            --text-color: #f5f5f5;
+            --border-color: rgba(46, 204, 113, 0.3);
         }
 
         body {
-            font-family: 'Segoe UI', sans-serif;
+            font-family: 'Poppins', sans-serif;
             background-color: var(--bg-color);
             color: var(--text-color);
             margin: 0;
@@ -23,6 +24,8 @@
             align-items: center;
             min-height: 100vh;
             overflow-x: hidden;
+            /* Tambahan gradient halus di background */
+            background: radial-gradient(circle at center, #2d2622 0%, #1a1412 100%);
         }
 
         .container {
@@ -31,14 +34,21 @@
             background: var(--card-bg);
             backdrop-filter: blur(15px);
             padding: 2rem;
-            border-radius: 25px;
+            border-radius: 30px;
             border: 1px solid var(--border-color);
-            box-shadow: 0 0 30px rgba(0, 242, 255, 0.1);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
             text-align: center;
             position: relative;
         }
 
-        h1 { color: var(--accent-color); font-size: 1.5rem; letter-spacing: 2px; margin-bottom: 5px; text-shadow: 0 0 10px rgba(0, 242, 255, 0.5); }
+        h1 { 
+            color: var(--accent-color); 
+            font-size: 1.6rem; 
+            font-weight: 800;
+            letter-spacing: 1px; 
+            margin-bottom: 5px; 
+            text-shadow: 0 0 15px rgba(46, 204, 113, 0.4);
+        }
 
         .upload-area {
             border: 2px dashed var(--border-color);
@@ -47,36 +57,28 @@
             cursor: pointer;
             margin-bottom: 1.5rem;
             transition: 0.3s;
-            position: relative;
-            overflow: hidden;
             background: rgba(0, 0, 0, 0.2);
         }
 
-        .upload-area:hover { border-color: var(--accent-color); background: rgba(0, 242, 255, 0.05); }
+        .upload-area:hover { border-color: var(--accent-color); background: rgba(46, 204, 113, 0.05); }
 
-        #preview { max-width: 100%; border-radius: 12px; display: none; margin: 0 auto; position: relative; z-index: 1; }
+        #preview { max-width: 100%; border-radius: 15px; display: none; margin: 0 auto; box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
 
         .scanner-line {
             display: none;
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 4px;
+            top: 0; left: 0; width: 100%; height: 4px;
             background: var(--accent-color);
-            box-shadow: 0 0 15px var(--accent-color);
+            box-shadow: 0 0 20px var(--accent-color);
             z-index: 2;
-            animation: scan 2s linear infinite;
+            animation: scan 2.5s linear infinite;
         }
 
         @keyframes scan { 0% { top: 0; } 100% { top: 100%; } }
 
         .spinner {
-            display: none;
-            width: 40px;
-            height: 40px;
-            margin: 15px auto;
-            border: 4px solid rgba(0, 242, 255, 0.1);
+            display: none; width: 45px; height: 45px; margin: 20px auto;
+            border: 4px solid rgba(46, 204, 113, 0.1);
             border-left-color: var(--accent-color);
             border-radius: 50%;
             animation: spin 1s linear infinite;
@@ -85,131 +87,132 @@
         @keyframes spin { 100% { transform: rotate(360deg); } }
 
         button {
-            background: transparent;
-            border: 2px solid var(--accent-color);
-            color: var(--accent-color);
-            padding: 14px;
-            border-radius: 12px;
+            background: linear-gradient(135deg, #27ae60, #2ecc71);
+            border: none;
+            color: #fff;
+            padding: 16px;
+            border-radius: 15px;
             cursor: pointer;
             width: 100%;
-            font-weight: bold;
+            font-weight: 600;
             text-transform: uppercase;
-            letter-spacing: 1px;
-            transition: 0.3s;
+            font-size: 0.9rem;
+            transition: 0.4s;
+            box-shadow: 0 4px 15px rgba(39, 174, 96, 0.3);
         }
 
-        button:hover:not(:disabled) { background: var(--accent-color); color: #000; box-shadow: 0 0 20px var(--accent-color); }
-        button:disabled { border-color: #444; color: #444; cursor: not-allowed; }
+        button:hover:not(:disabled) { 
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(46, 204, 113, 0.5);
+        }
 
         #result {
             margin-top: 1.5rem;
             padding: 1.2rem;
-            border-radius: 15px;
-            background: rgba(0, 242, 255, 0.1);
+            border-radius: 20px;
+            background: rgba(0, 0, 0, 0.3);
             display: none;
-            border: 1px solid var(--accent-color);
-            animation: fadeIn 0.5s ease;
+            border: 1px solid var(--border-color);
+            animation: fadeIn 0.6s ease-out;
         }
 
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
 
-        .label { font-size: 1.3rem; font-weight: bold; color: var(--accent-color); display: block; margin-bottom: 5px; }
-        .loading-text { display: none; color: var(--accent-color); font-size: 0.9rem; margin-top: 10px; font-style: italic; }
+        .label { font-size: 1.4rem; font-weight: 800; color: var(--accent-color); margin-bottom: 10px; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h1>MENDETEKSI TEKSTUR TANAH</h1>
-    <p style="font-size: 0.8rem; opacity: 0.7; margin-bottom: 20px; letter-spacing: 1px;">Mengetahui Jenis, tingkat kesuburan, perkiraan pH, kesesuaian tanaman, dan pengelolaan</p>
+    <h1>DETEKTOR TEKSTUR TANAH</h1>
+    <p style="font-size: 0.75rem; opacity: 0.7; margin-bottom: 25px; line-height: 1.4;">
+        Analisis Tekstur, pH, Hara, dan Rekomendasi Tanaman <br><b>PPL Milenial Wajo</b>
+    </p>
     
-    <div class="upload-area" id="dropZone" onclick="document.getElementById('fileInput').click()">
+    <div class="upload-area" onclick="document.getElementById('fileInput').click()">
         <div class="scanner-line" id="scanner"></div>
-        <p id="msg" style="margin:0;">Foto Sampel Tanah</p>
+        <p id="msg" style="font-size: 0.9rem;">Foto Sampel Tanah</p>
         <input type="file" id="fileInput" accept="image/*" hidden onchange="previewImage(event)">
         <img id="preview">
     </div>
 
-    <button id="btnDetect" onclick="detectSoil()">Analisis Tekstur Tanah</button>
-    
+    <button id="btnDetect" onclick="detectSoil()">Analisis Tanah</button>
     <div class="spinner" id="loader"></div>
-    <div class="loading-text" id="loadText">Menghubungkan ke Neural Network...</div>
 
     <div id="result">
         <span class="label" id="resLabel">---</span>
         <div id="resConf"></div>
-        
-        <div style="margin-top: 15px; background: rgba(255,255,255,0.03); padding: 10px; border-radius: 12px;">
+        <div style="margin-top: 20px; background: rgba(0,0,0,0.2); padding: 15px; border-radius: 15px;">
             <canvas id="textureTriangle" width="300" height="260" style="max-width: 100%;"></canvas>
-            <p style="font-size: 0.7rem; opacity: 0.6; margin-top: 5px;">Visualisasi Segitiga Tekstur USDA</p>
+            <p style="font-size: 0.65rem; opacity: 0.5; margin-top: 8px;">Diagram Tekstur Tanah USDA</p>
         </div>
     </div>
 </div>
 
 <script>
-    function previewImage(event) {
-        const reader = new FileReader();
-        const output = document.getElementById('preview');
-        const msg = document.getElementById('msg');
-        reader.onload = function() {
-            output.src = reader.result;
-            output.style.display = 'block';
-            msg.style.display = 'none';
-        };
-        if(event.target.files[0]) reader.readAsDataURL(event.target.files[0]);
-    }
-
+    // Fungsi preview, drawTriangle, kamusTanah, dan detectSoil tetap sama 
+    // namun pastikan warna di drawTriangle juga disesuaikan ke HIJAU:
+    
     function drawTriangle(label) {
         const canvas = document.getElementById('textureTriangle');
         const ctx = canvas.getContext('2d');
         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-        const top = { x: 150, y: 30 };
-        const left = { x: 30, y: 230 };
-        const right = { x: 270, y: 230 };
+        const top = { x: 150, y: 35 };     
+        const left = { x: 35, y: 225 };    
+        const right = { x: 265, y: 225 };  
 
-        ctx.beginPath();
-        ctx.moveTo(top.x, top.y);
-        ctx.lineTo(left.x, left.y);
-        ctx.lineTo(right.x, right.y);
-        ctx.closePath();
-        ctx.strokeStyle = '#00f2ff';
-        ctx.lineWidth = 2;
-        ctx.stroke();
+        // Garis Pembatas (Warna Hijau Transparan)
+        ctx.strokeStyle = 'rgba(46, 204, 113, 0.2)';
+        ctx.lineWidth = 1;
+        const levels = [0.2, 0.4, 0.6, 0.8];
+        levels.forEach(lvl => {
+            let y = 225 - (lvl * 190);
+            let xStart = 35 + (lvl * 115 * 0.5);
+            let xEnd = 265 - (lvl * 115 * 0.5);
+            ctx.beginPath(); ctx.moveTo(xStart, y); ctx.lineTo(xEnd, y); ctx.stroke();
+        });
 
-        ctx.fillStyle = '#00f2ff';
-        ctx.font = 'bold 10px Arial';
-        ctx.fillText("LIAT", top.x - 12, top.y - 10);
-        ctx.fillText("PASIR", left.x - 25, left.y + 15);
-        ctx.fillText("DEBU", right.x - 5, right.y + 15);
-
-        let dot = { x: 150, y: 130 }; 
-        if (label.toLowerCase().includes("clay")) dot = { x: 150, y: 70 };
-        else if (label.toLowerCase().includes("sandy")) dot = { x: 80, y: 190 };
-        else if (label.toLowerCase().includes("loam")) dot = { x: 150, y: 170 };
-        else if (label.toLowerCase().includes("alluvial")) dot = { x: 190, y: 180 };
-
-        ctx.beginPath();
-        ctx.arc(dot.x, dot.y, 6, 0, Math.PI * 2);
-        ctx.fillStyle = '#ff0055';
+        // Segitiga Utama (Warna Hijau Neon)
         ctx.shadowBlur = 10;
-        ctx.shadowColor = "#ff0055";
-        ctx.fill();
+        ctx.shadowColor = 'rgba(46, 204, 113, 0.6)';
+        ctx.strokeStyle = '#2ecc71';
+        ctx.lineWidth = 2.5;
+        ctx.beginPath(); ctx.moveTo(top.x, top.y); ctx.lineTo(left.x, left.y); ctx.lineTo(right.x, right.y); ctx.closePath(); ctx.stroke();
+
+        ctx.shadowBlur = 0;
+        ctx.fillStyle = '#2ecc71';
+        ctx.font = 'bold 11px Poppins';
+        ctx.fillText("LIAT", top.x - 13, top.y - 12);
+        ctx.fillText("PASIR", left.x - 30, left.y + 18);
+        ctx.fillText("DEBU", right.x - 5, right.y + 18);
+
+        let dot = { x: 150, y: 130 };
+        const labelLower = label.toLowerCase();
+        if (labelLower.includes("clay")) dot = { x: 150, y: 80 };
+        else if (labelLower.includes("sandy")) dot = { x: 90, y: 200 };
+        else if (labelLower.includes("loam")) dot = { x: 150, y: 180 };
+        else if (labelLower.includes("alluvial")) dot = { x: 200, y: 190 };
+
+        ctx.shadowBlur = 15;
+        ctx.shadowColor = "#e74c3c"; // Titik tetap merah agar kontras dengan hijau
+        ctx.beginPath(); ctx.arc(dot.x, dot.y, 7, 0, Math.PI * 2);
+        ctx.fillStyle = '#e74c3c'; ctx.fill();
     }
 
-    const kamusTanah = {
-        "Alluvial": { "nama": "Tanah Alluvial", "pH": "6.0 - 7.0", "organik": "Sedang", "npk": "Tinggi", "subur": "Sangat Subur", "saran": "Ideal untuk Padi. Jaga sirkulasi air." },
-        "Black": { "nama": "Tanah Hitam", "pH": "6.5 - 7.5", "organik": "Tinggi", "npk": "Tinggi", "subur": "Subur", "saran": "Bagus untuk Kedelai. Olah saat lembap." },
-        "Cinder": { "nama": "Tanah Vulkanik", "pH": "5.0 - 7.0", "organik": "Tinggi", "npk": "Sangat Tinggi", "subur": "Sangat Subur", "saran": "Terbaik untuk Sayuran/Horti." },
-        "Clay": { "nama": "Tanah Liat", "pH": "4.5 - 6.0", "organik": "Sedang", "npk": "Sedang", "subur": "Sedang", "saran": "Drainase wajib lancar agar tak busuk." },
-        "Laterite": { "nama": "Tanah Laterit", "pH": "4.0 - 5.5", "organik": "Rendah", "npk": "Rendah", "subur": "Kurang", "saran": "Tambah pupuk organik & kapur." },
-        "Loamy": { "nama": "Tanah Lempung", "pH": "6.0 - 7.0", "organik": "Tinggi", "npk": "Tinggi", "subur": "Sangat Subur", "saran": "Tanah prima untuk semua tanaman." },
-        "loam": { "nama": "Tanah Lempung", "pH": "6.0 - 7.0", "organik": "Tinggi", "npk": "Tinggi", "subur": "Sangat Subur", "saran": "Tanah prima untuk semua tanaman." },
-        "Peat": { "nama": "Tanah Gambut", "pH": "3.0 - 5.0", "organik": "Sangat Tinggi", "npk": "Rendah", "subur": "Rendah", "saran": "Beri Dolomit & parit drainase." },
-        "Red": { "nama": "Tanah Merah", "pH": "4.5 - 5.5", "organik": "Rendah", "npk": "Rendah", "subur": "Kurang", "saran": "Beri SP-36 dosis ekstra." },
-        "Sandy": { "nama": "Tanah Berpasir", "pH": "5.5 - 7.0", "organik": "Rendah", "npk": "Rendah", "subur": "Rendah", "saran": "Wajib tambah kompos tiap musim." },
-        "Yellow": { "nama": "Tanah Kuning", "pH": "4.5 - 5.5", "organik": "Rendah", "npk": "Rendah", "subur": "Kurang", "saran": "Pakai mulsa agar tak tererosi." }
-    };
+      const kamusTanah = {
+    "Alluvial": { "nama": "Tanah Alluvial", "pH": "6.0 - 7.0", "organik": "Sedang", "npk": "Tinggi", "subur": "Sangat Subur", "tanaman": "Padi, Palawija, Tebu", "saran": "Ideal untuk Padi. Jaga sirkulasi air." },
+    "Black": { "nama": "Tanah Hitam", "pH": "6.5 - 7.5", "organik": "Tinggi", "npk": "Tinggi", "subur": "Subur", "tanaman": "Kapas, Kedelai, Jagung", "saran": "Bagus untuk Kedelai. Olah saat lembap." },
+    "Cinder": { "nama": "Tanah Vulkanik", "pH": "5.0 - 7.0", "organik": "Tinggi", "npk": "Sangat Tinggi", "subit": "Sangat Subur", "tanaman": "Sayuran, Kopi, Buah-buahan", "saran": "Terbaik untuk Sayuran/Horti." },
+    "Clay": { "nama": "Tanah Liat", "pH": "4.5 - 6.0", "organik": "Sedang", "npk": "Sedang", "subur": "Sedang", "tanaman": "Padi, Rumput Gajah", "saran": "Drainase wajib lancar agar tak busuk." },
+    "Laterite": { "nama": "Tanah Laterit", "pH": "4.0 - 5.5", "organik": "Rendah", "npk": "Rendah", "subur": "Kurang", "tanaman": "Kelapa Sawit, Karet", "saran": "Tambah pupuk organik & kapur." },
+    "Loamy": { "nama": "Tanah Lempung", "pH": "6.0 - 7.0", "organik": "Tinggi", "npk": "Tinggi", "subur": "Sangat Subur", "tanaman": "Hampir Semua Jenis Tanaman", "saran": "Tanah prima untuk semua tanaman." },
+    "loam": { "nama": "Tanah Lempung", "pH": "6.0 - 7.0", "organik": "Tinggi", "npk": "Tinggi", "subur": "Sangat Subur", "tanaman": "Hampir Semua Jenis Tanaman", "saran": "Tanah prima untuk semua tanaman." },
+    "Peat": { "nama": "Tanah Gambut", "pH": "3.0 - 5.0", "organik": "Sangat Tinggi", "npk": "Rendah", "subur": "Rendah", "tanaman": "Nanas, Kelapa Sawit", "saran": "Beri Dolomit & parit drainase." },
+    "Red": { "nama": "Tanah Merah", "pH": "4.5 - 5.5", "organik": "Rendah", "npk": "Rendah", "subur": "Kurang", "tanaman": "Ubi Kayu, Karet", "saran": "Beri SP-36 dosis ekstra." },
+    "Sandy": { "nama": "Tanah Berpasir", "pH": "5.5 - 7.0", "organik": "Rendah", "npk": "Rendah", "subur": "Rendah", "tanaman": "Kelapa, Semangka, Kacang Tanah", "saran": "Wajib tambah kompos tiap musim." },
+    "Yellow": { "nama": "Tanah Kuning", "pH": "4.5 - 5.5", "organik": "Rendah", "npk": "Rendah", "subur": "Kurang", "tanaman": "Tanaman Keras/Kehutanan", "saran": "Pakai mulsa agar tak tererosi." }
+};
 
     async function detectSoil() {
         const fileInput = document.getElementById('fileInput');
@@ -247,6 +250,7 @@
                             <tr><td style="padding: 4px 0; opacity: 0.8;">Estimasi pH</td><td style="text-align: right;">${infoTanah.pH}</td></tr>
                             <tr><td style="padding: 4px 0; opacity: 0.8;">Bahan Organik</td><td style="text-align: right;">${infoTanah.organik}</td></tr>
                             <tr><td style="padding: 4px 0; opacity: 0.8;">Kandungan NPK</td><td style="text-align: right;">${infoTanah.npk}</td></tr>
+                            <tr><td style="padding: 8px 0 4px 0; opacity: 0.8; vertical-align: top;">Tanaman Cocok</td><td style="text-align: right; color: #ffd700;"><i>${infoTanah.tanaman}</i></td></tr>
                         </table>
                         <div style="border-top: 1px solid rgba(0,242,255,0.2); margin-top: 10px; padding-top: 10px;">
                             <p style="color: #fff; margin: 0;"><b>Saran PPL:</b><br>${infoTanah.saran}</p>
